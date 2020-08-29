@@ -1,10 +1,9 @@
 {
   "name": "blaseball-peanut-deathstar",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Automate Eating Peanuts",
-  "main": "index.js",
-  "scripts": {
-    "start": "node ./src/index.js"
+  "bin": {
+    "blaseball-peanut-deathstar": "./src/index.js"
   },
   "repository": {
     "type": "git",

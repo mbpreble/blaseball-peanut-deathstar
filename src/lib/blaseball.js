@@ -1,5 +1,5 @@
 const nodeFetch = require('node-fetch');
-const fetchCookie = require('fetch-cookie');
+const fetchCookie = require('fetch-cookie/node-fetch');
 const EventSource = require('eventsource');
 
 // May be reverse engineered correctly, then again, maybe not!
@@ -22,6 +22,8 @@ const Weather = {
 class Blaseball {
     loginUrl = "https://www.blaseball.com/auth/local";
     eventSourceUrl = "https://www.blaseball.com/events/streamData";
+    userUrl = "https://www.blaseball.com/api/getUser"
+    peanutsUrl = "https://www.blaseball.com/api/eatADangPeanut"
     loginCookies = null;
 
 
@@ -53,15 +55,36 @@ class Blaseball {
         });
     }
 
-    deployPeanuts() {
-        // Do... something. A blocking attempt which stops when out of peanuts?
+    async getUser() {
+        return this.fetch(
+            this.userUrl,
+        ).then(response => response.json());
+    }
+
+    async eatPeanut() {
+        return this.fetch(
+            this.peanutsUrl,
+            {
+                method: 'post',
+                body: JSON.stringify({amount: 1}),
+                headers: {'Content-Type': 'application/json'}
+            }
+        )
+    }
+
+    async deployPeanuts() {
+        const user = await this.getUser();
+        const peanuts = user.peanuts;
+
+        // Just spend all of the peanuts we think we can spend
+        for(let i = peanuts; i > 0; i--) {
+            await this.eatPeanut();
+            console.log('Ate a dang peanut');
+        }
     }
 
     streamData() {
-        return new EventSource(
-            this.eventSourceUrl,
-            {headers: {'Cookie': this.loginCookies}}
-        );
+        return new EventSource(this.eventSourceUrl);
     }
 }
 

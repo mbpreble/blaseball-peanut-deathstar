@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const { Blaseball, Weather } = require('./lib/blaseball')
 const prompt = require('prompt');
 
@@ -20,15 +21,22 @@ prompt.get(schema, async (err, result) => {
     const blaseball = new Blaseball(result.username, result.password);
     await blaseball.login();
 
-    // Can I access publicly?
     const eventStream = blaseball.streamData();
-    eventStream.addEventListener('message', message => {
-        const messageObj = JSON.parse(message.data)
-        const peanuts = messageObj.schedule.some((game) => game.weather === Weather.PEANUTS);
 
-        // Deploy the peanut laser
-        if (peanuts) {
-            blaseball.deployPeanuts();
+    let deployingPeanuts = false;
+
+    eventStream.addEventListener('message', async message => {
+        const messageObj = JSON.parse(message.data)
+        const peanuts = messageObj.value.games.schedule.some((game) => game.weather === Weather.PEANUTS);
+
+        // Deploy the peanuts
+        if (peanuts && !deployingPeanuts) {
+            console.log('PEANUTS DETECTED, DEPLOYING PEANUTS')
+            deployingPeanuts = true;
+            await blaseball.deployPeanuts();
+            deployingPeanuts = false
+        } else if (!peanuts) {
+            console.log('NO PEANUTS DETECTED')
         }
     });
 });
