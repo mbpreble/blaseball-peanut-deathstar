@@ -1,0 +1,25 @@
+{
+  "name": "blaseball-peanut-deathstar",
+  "version": "1.0.0",
+  "description": "Automate Eating Peanuts",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbpreble/blaseball-peanut-deathstar.git"
+  },
+  "author": "mbpreble",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mbpreble/blaseball-peanut-deathstar/issues"
+  },
+  "homepage": "https://github.com/mbpreble/blaseball-peanut-deathstar#readme",
+  "dependencies": {
+    "eventsource": "^1.0.7",
+    "fetch-cookie": "^0.10.1",
+    "node-fetch": "^2.6.0",
+    "prompt": "^1.0.0"
+  }
+}
